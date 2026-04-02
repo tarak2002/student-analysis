@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI Tutor - Cognitive Assessment &amp; Personalized Learning Plan Generator for Mathematics. Assess student understanding, diagnose difficulties, and generate tailored learning plans.">
+  <title>AI Tutor — Cognitive Assessment &amp; Learning Plan Generator</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+
+  <!-- ═══ Navbar ═══ -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="navbar-brand" onclick="event.preventDefault();">
+      <div class="navbar-logo">🧠</div>
+      <div>
+        <div class="navbar-title">AI Tutor</div>
+        <div class="navbar-subtitle">Cognitive Assessment</div>
+      </div>
+    </a>
+    <ul class="navbar-nav">
+      <li><button data-nav="landing" class="active" id="nav-home">Home</button></li>
+      <li><button data-nav="assessment" id="nav-assess">Assessment</button></li>
+      <li><button data-nav="results" id="nav-results">Results</button></li>
+      <li><button data-nav="plan" id="nav-plan">Learning Plan</button></li>
+      <li><button data-nav="educator" id="nav-educator">Educator</button></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ Feedback Overlay ═══ -->
+  <div class="feedback-overlay" id="feedback-overlay">
+    <span class="feedback-icon" id="feedback-icon">✅</span>
+  </div>
+
+  <!-- ═══ Student Detail Modal ═══ -->
+  <div class="modal-overlay" id="student-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-student-name">Student Detail</span>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-student-body"></div>
+    </div>
+  </div>
+
+  <main class="app-container">
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Landing
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view active" id="view-landing">
+      <div class="landing-hero">
+        <div class="landing-badge">
+          <span class="pulse"></span>
+          Mathematics · Linear Equations
+        </div>
+        <h1 class="landing-title">
+          Understand How<br>
+          Students <span class="gradient">Think & Learn</span>
+        </h1>
+        <p class="landing-desc">
+          Assess cognitive understanding, diagnose specific learning difficulties, and generate personalized action plans — all powered by intelligent pattern analysis.
+        </p>
+        <div class="landing-actions">
+          <button class="btn btn-primary btn-lg" id="btn-start-assessment">
+            ✏️ Take Assessment
+          </button>
+          <button class="btn btn-secondary btn-lg" id="btn-view-demo">
+            🎲 Simulate Random Student
+          </button>
+          <button class="btn btn-teal btn-lg" id="btn-educator">
+            👩‍🏫 Educator Dashboard
+          </button>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="card feature-card animate-in animate-in-delay-1">
+          <div class="feature-icon purple">🧠</div>
+          <h3 class="feature-title">Personality Profile</h3>
+          <p class="feature-desc">
+            Starts with a quick learning-style quiz to understand how you learn best — visual, auditory, kinesthetic, or reading.
+          </p>
+        </div>
+        <div class="card feature-card animate-in animate-in-delay-2">
+          <div class="feature-icon teal">🔬</div>
+          <h3 class="feature-title">Cognitive Diagnosis</h3>
+          <p class="feature-desc">
+            Identifies 6 types of cognitive difficulties — from sign errors and procedural gaps to word problem interpretation issues.
+          </p>
+        </div>
+        <div class="card feature-card animate-in animate-in-delay-3">
+          <div class="feature-icon emerald">📋</div>
+          <h3 class="feature-title">Personalized Plans</h3>
+          <p class="feature-desc">
+            Generates tailored learning strategies matched to your learning style, with activities, times, and curated resources.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Personality Test
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view" id="view-personality">
+      <div class="assessment-header">
+        <div class="assessment-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="personality-progress-fill" style="width: 0%"></div>
+          </div>
+          <span class="progress-text" id="personality-progress-text">Question 1 of 7</span>
+        </div>
+        <span class="level-badge" style="background: var(--primary-50); color: var(--primary-600);">🧠 Personality</span>
+      </div>
+
+      <div class="card card-elevated question-card" id="personality-card">
+        <div class="question-type-label" id="personality-category">🧠 Learning Style</div>
+        <p class="question-text" id="personality-question-text">Loading question...</p>
+        <div class="personality-options" id="personality-options"></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Assessment
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view" id="view-assessment">
+      <div class="assessment-header">
+        <div class="assessment-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+          <span class="progress-text">Question 1 of 5</span>
+        </div>
+        <span class="level-badge level-1" id="level-badge">Level 1</span>
+      </div>
+
+      <div class="card card-elevated question-card">
+        <div class="question-type-label" id="question-type-label">✏️ Solve</div>
+        <p class="question-text" id="question-text">Loading question...</p>
+        <div class="equation-display" id="equation-display" style="display: none;"></div>
+
+        <div class="answer-input-group">
+          <label for="answer-input">Your Answer:</label>
+          <input type="text" id="answer-input" class="answer-input" placeholder="Enter your answer (e.g., 5 or -3)" autocomplete="off">
+        </div>
+
+        <div id="hint-box" class="hint-box">
+          💡 <span id="hint-text"></span>
+        </div>
+
+        <div class="question-actions">
+          <button class="hint-toggle" id="btn-hint">💡 Show Hint</button>
+          <button class="btn btn-primary" id="btn-submit-answer">Submit →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Results
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view" id="view-results">
+      <div class="results-header">
+        <div class="results-score-ring">
+          <canvas id="score-ring-canvas"></canvas>
+          <div class="results-score-text">
+            <div class="results-score-number" id="score-number">0%</div>
+            <div class="results-score-label">Score</div>
+          </div>
+        </div>
+        <p class="results-summary" id="results-summary"></p>
+      </div>
+
+      <div class="results-grid">
+        <div class="card stat-card animate-in animate-in-delay-1">
+          <div class="stat-number green" id="stat-correct">0/0</div>
+          <div class="stat-label">Questions Correct</div>
+        </div>
+        <div class="card stat-card animate-in animate-in-delay-2">
+          <div class="stat-number blue" id="stat-level">Level 1</div>
+          <div class="stat-label">Highest Level Mastered</div>
+        </div>
+        <div class="card stat-card animate-in animate-in-delay-3">
+          <div class="stat-number teal" id="stat-avg-time">0s</div>
+          <div class="stat-label">Avg. Response Time</div>
+        </div>
+        <div class="card stat-card animate-in animate-in-delay-4">
+          <div class="stat-number amber" id="stat-difficulties">0</div>
+          <div class="stat-label">Difficulty Areas</div>
+        </div>
+      </div>
+
+      <!-- Personality Profile -->
+      <div id="personality-profile-container" class="difficulty-section mt-8" style="display: none;"></div>
+
+      <!-- Behavioral Profile -->
+      <div id="behavior-profile-container" class="difficulty-section mt-8" style="display: none;"></div>
+
+      <!-- Level Performance -->
+      <div class="difficulty-section mt-8">
+        <h2 class="section-title">📊 Performance by Level</h2>
+        <div class="level-perf-grid" id="level-perf-container"></div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-row mt-6">
+        <div class="card chart-container">
+          <div class="chart-title">🎯 Skill Radar</div>
+          <canvas id="radar-chart"></canvas>
+        </div>
+        <div class="card chart-container">
+          <div class="chart-title">⚠️ Difficulty Distribution</div>
+          <canvas id="bar-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Difficulty Breakdown -->
+      <div class="difficulty-section mt-8">
+        <h2 class="section-title">⚠️ Diagnosed Difficulties</h2>
+        <div class="difficulty-list" id="difficulty-list"></div>
+      </div>
+
+      <!-- Strengths -->
+      <div class="difficulty-section mt-6">
+        <h2 class="section-title">💪 Strengths</h2>
+        <div class="strengths-list" id="strengths-container"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="text-center mt-8" style="display: flex; gap: var(--space-4); justify-content: center;">
+        <button class="btn btn-primary btn-lg" id="btn-view-plan">📋 View Learning Plan</button>
+        <button class="btn btn-secondary btn-lg" id="btn-restart">🔄 Start Over</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Learning Plan
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view" id="view-plan">
+      <div class="plan-header">
+        <h1 class="section-title" style="font-size: 1.5rem;">📋 Your Personalized Learning Plan</h1>
+
+        <div class="plan-encouragement" id="plan-encouragement"></div>
+
+        <div class="plan-meta">
+          <div class="plan-meta-item">
+            <span class="icon">⏱</span> Estimated time: <strong id="plan-total-time">0 min</strong>
+          </div>
+          <div class="plan-meta-item">
+            <span class="icon">🎯</span> Focus areas: <strong id="plan-focus-count">0</strong>
+          </div>
+          <div class="plan-meta-item">
+            <span class="icon">📝</span> Action steps: <strong id="plan-steps-count">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div id="plan-personality-note" style="display: none;"></div>
+
+      <div id="curriculum-container" class="mt-8"></div>
+
+      <div id="focus-areas-container" class="mt-8"></div>
+
+      <div class="text-center mt-8">
+        <button class="btn btn-secondary btn-lg" onclick="document.querySelectorAll('[data-nav]').forEach(b => b.classList.remove('active')); document.getElementById('nav-home').classList.add('active'); document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('view-landing').classList.add('active');">
+          ← Back to Home
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════
+         VIEW: Educator Dashboard
+         ═══════════════════════════════════════════════════════ -->
+    <section class="view" id="view-educator">
+      <h1 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-6);">👩‍🏫 Educator Dashboard</h1>
+
+      <!-- Class-wide stats -->
+      <div class="dashboard-stats">
+        <div class="card dashboard-stat">
+          <div class="dashboard-stat-number" style="color: var(--primary-500);" id="dashboard-avg-score">—</div>
+          <div class="dashboard-stat-label">Class Average</div>
+        </div>
+        <div class="card dashboard-stat">
+          <div class="dashboard-stat-number" style="color: var(--teal-500);" id="dashboard-total-students">—</div>
+          <div class="dashboard-stat-label">Total Students</div>
+        </div>
+        <div class="card dashboard-stat">
+          <div class="dashboard-stat-number" style="color: var(--red-500);" id="dashboard-struggling">—</div>
+          <div class="dashboard-stat-label">Struggling (&lt;50%)</div>
+        </div>
+        <div class="card dashboard-stat">
+          <div class="dashboard-stat-number" style="color: var(--emerald-500);" id="dashboard-proficient">—</div>
+          <div class="dashboard-stat-label">Proficient (70%+)</div>
+        </div>
+      </div>
+
+      <!-- Charts + Heatmap -->
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3 class="chart-title">📊 Class Performance Distribution</h3>
+          <div class="flex-center">
+            <canvas id="class-donut-chart"></canvas>
+          </div>
+          <div style="display: flex; gap: var(--space-4); justify-content: center; margin-top: var(--space-4); font-size: 0.78rem;">
+            <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; margin-right: 4px;"></span>Proficient</span>
+            <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #F59E0B; margin-right: 4px;"></span>Developing</span>
+            <span><span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #EF4444; margin-right: 4px;"></span>Struggling</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="chart-title">🔥 Common Misconception Heatmap</h3>
+          <div class="heatmap-grid" id="heatmap-container"></div>
+        </div>
+      </div>
+
+      <!-- Student Table -->
+      <div class="card mt-6">
+        <h3 class="section-title">👥 All Students</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: var(--space-4);">Click on any student row to view their detailed assessment and personalized plan.</p>
+        <div class="student-table-container">
+          <table class="student-table" id="student-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Grade</th>
+                <th>Score</th>
+                <th>Correct</th>
+                <th>Learning Style</th>
+                <th>Top Difficulties</th>
+              </tr>
+            </thead>
+            <tbody id="student-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="text-center mt-8">
+        <button class="btn btn-secondary btn-lg" onclick="document.querySelectorAll('[data-nav]').forEach(b => b.classList.remove('active')); document.getElementById('nav-home').classList.add('active'); document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('view-landing').classList.add('active');">
+          ← Back to Home
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ Scripts ═══ -->
+  <script src="data/questions.js"></script>
+  <script src="data/sample-responses.js"></script>
+  <script src="data/personality.js"></script>
+  <script src="engine/analyzer.js"></script>
+  <script src="engine/planner.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
